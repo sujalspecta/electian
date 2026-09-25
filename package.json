@@ -34,7 +34,7 @@
     "redux-persist": "^6.0.0",
     "simple-react-validator": "^1.6.2",
     "slick-carousel": "^2.0.0",
-    "swiper": "^12.0.3",
+    "swiper": "^14.2.0",
     "yet-another-react-lightbox": "^3.32.2"
   },
   "devDependencies": {
