@@ -1,11 +1,13 @@
 import React from "react";
 import { Link } from 'react-router-dom'
-import Slider from "react-slick";
+import Sliderc from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import fImg1 from '../../images/election-donation/1.svg'
 import fImg2 from '../../images/election-donation/2.svg'
 import fImg3 from '../../images/election-donation/3.svg'
+
+const Slider = Sliderc.default || Sliderc
 
 const settings = {
     dots: false,

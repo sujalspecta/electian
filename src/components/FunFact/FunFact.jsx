@@ -1,5 +1,5 @@
-import CountUp from 'react-countup';
-
+import CountUpc from 'react-countup';
+const CountUp = CountUpc.default || CountUpc
 const FunFact = (props) => {
 
     return (

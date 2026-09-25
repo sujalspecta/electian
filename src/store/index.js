@@ -7,7 +7,7 @@ import { wishlistListener } from "./listeners/wishlistListener";
 
 const persistConfig = {
   key: "root",
-  storage,
+  storage: storage.default ? storage.default : storage, 
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

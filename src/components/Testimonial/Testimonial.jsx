@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Slider from "react-slick";
+import Sliderc from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ts1 from '../../images/testimonial/1.jpg'
@@ -7,7 +7,7 @@ import ts2 from '../../images/testimonial/2.jpg'
 import ts3 from '../../images/testimonial/3.jpg'
 import ts4 from '../../images/testimonial/4.jpg'
 import ts5 from '../../images/testimonial/5.jpg'
-
+const Slider = Sliderc.default || Sliderc
 
 const testimonial = [
     {
@@ -105,7 +105,7 @@ const Testimonial = (props) => {
                                 <Slider
                                     asNavFor={nav1}
                                     ref={(slider2) => setNav2(slider2)}
-                                    slidesToShow={5}
+                                    slidesToShow={1}
                                     slidesToScroll={1}
                                     fade={true}
                                     dots={false}

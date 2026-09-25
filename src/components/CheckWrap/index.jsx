@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
-import SimpleReactValidator from "simple-react-validator";
-import { toast } from "react-toastify";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
-
-const CheckWrap = (props) => {
-
-    const push = useNavigate()
+const CheckWrap = () => {
+    const navigate = useNavigate();
 
     const [value, setValue] = useState({
         email: 'user@gmail.com',
@@ -20,22 +17,73 @@ const CheckWrap = (props) => {
         remember: false,
     });
 
+    const [errors, setErrors] = useState({});
+
     const changeHandler = (e) => {
-        setValue({ ...value, [e.target.name]: e.target.value });
-        validator.showMessages();
+        const { name, value: inputValue } = e.target;
+
+        setValue((prev) => ({
+            ...prev,
+            [name]: inputValue,
+        }));
+
+        setErrors((prev) => ({
+            ...prev,
+            [name]: '',
+        }));
     };
 
-    const rememberHandler = () => {
-        setValue({ ...value, remember: !value.remember });
-    };
+    const validateForm = () => {
+        const newErrors = {};
 
-    const [validator] = React.useState(new SimpleReactValidator({
-        className: 'errorMessage'
-    }));
+        if (!value.card_holder.trim()) {
+            newErrors.card_holder = 'Card holder name is required';
+        }
+
+        if (!value.card_number.trim()) {
+            newErrors.card_number = 'Card number is required';
+        } else if (!/^\d{9,19}$/.test(value.card_number)) {
+            newErrors.card_number = 'Enter a valid card number';
+        }
+
+        if (!value.cvv.trim()) {
+            newErrors.cvv = 'CVV is required';
+        } else if (!/^\d{3,4}$/.test(value.cvv)) {
+            newErrors.cvv = 'CVV must be 3 or 4 digits';
+        }
+
+        if (!value.expire_date) {
+            newErrors.expire_date = 'Expire date is required';
+        } else {
+            const selectedDate = new Date(value.expire_date);
+            const today = new Date();
+
+            selectedDate.setHours(23, 59, 59, 999);
+
+            if (selectedDate < today) {
+                newErrors.expire_date = 'Card has expired';
+            }
+        }
+
+        setErrors(newErrors);
+
+        return Object.keys(newErrors).length === 0;
+    };
 
     const submitForm = (e) => {
         e.preventDefault();
-        if (validator.allValid()) {
+
+        if (!validateForm()) {
+            toast.error('Please fill all required fields correctly.');
+            return;
+        }
+
+        const userRegex = /^user+.*/gm;
+        const email = value.email;
+
+        if (email.match(userRegex)) {
+            toast.success('Order Received successfully!');
+
             setValue({
                 email: '',
                 password: '',
@@ -43,23 +91,17 @@ const CheckWrap = (props) => {
                 card_number: '',
                 cvv: '',
                 expire_date: '',
-                remember: false
+                remember: false,
             });
-            validator.hideMessages();
 
-            const userRegex = /^user+.*/gm;
-            const email = value.email;
+            setErrors({});
 
-            if (email.match(userRegex)) {
-                toast.success('Order Recived sucessfully!');
-                push('/order_received');
-            } else {
-                toast.info('user not existed!');
-                alert('user not existed! credential is : user@*****.com | vendor@*****.com | admin@*****.com');
-            }
+            navigate('/order_received');
         } else {
-            validator.showMessages();
-            toast.error('Empty field is not allowed!');
+            toast.info('User does not exist!');
+            alert(
+                'User does not exist! credential is : user@*****.com | vendor@*****.com | admin@*****.com'
+            );
         }
     };
 
@@ -74,12 +116,16 @@ const CheckWrap = (props) => {
                                 label="Card holder Name"
                                 name="card_holder"
                                 value={value.card_holder}
-                                onChange={(e) => changeHandler(e)}
+                                onChange={changeHandler}
                                 type="text"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
+                                error={Boolean(errors.card_holder)}
+                                helperText={errors.card_holder || ''}
                                 className="formInput radiusNone"
+                                slotProps={{
+                                    inputLabel: {
+                                        shrink: true,
+                                    },
+                                }}
                             />
                         </div>
 
@@ -89,12 +135,16 @@ const CheckWrap = (props) => {
                                 label="Card Number"
                                 name="card_number"
                                 value={value.card_number}
-                                onChange={(e) => changeHandler(e)}
-                                type="number"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
+                                onChange={changeHandler}
+                                type="text"
+                                error={Boolean(errors.card_number)}
+                                helperText={errors.card_number || ''}
                                 className="formInput radiusNone"
+                                slotProps={{
+                                    inputLabel: {
+                                        shrink: true,
+                                    },
+                                }}
                             />
                         </div>
 
@@ -104,12 +154,16 @@ const CheckWrap = (props) => {
                                 label="CVV"
                                 name="cvv"
                                 value={value.cvv}
-                                onChange={(e) => changeHandler(e)}
+                                onChange={changeHandler}
                                 type="text"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
+                                error={Boolean(errors.cvv)}
+                                helperText={errors.cvv || ''}
                                 className="formInput radiusNone"
+                                slotProps={{
+                                    inputLabel: {
+                                        shrink: true,
+                                    },
+                                }}
                             />
                         </div>
 
@@ -119,12 +173,16 @@ const CheckWrap = (props) => {
                                 label="Expire Date"
                                 name="expire_date"
                                 value={value.expire_date}
-                                onChange={(e) => changeHandler(e)}
+                                onChange={changeHandler}
                                 type="date"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
+                                error={Boolean(errors.expire_date)}
+                                helperText={errors.expire_date || ''}
                                 className="formInput radiusNone"
+                                slotProps={{
+                                    inputLabel: {
+                                        shrink: true,
+                                    },
+                                }}
                             />
                         </div>
 
@@ -143,7 +201,7 @@ const CheckWrap = (props) => {
                 </form>
             </div>
         </div>
-    )
+    );
 };
 
 export default CheckWrap;
