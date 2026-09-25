@@ -29,11 +29,11 @@
     "react-router-dom": "^7.18.4",
     "react-scroll": "^1.9.3",
     "react-slick": "^0.31.0",
-    "react-toastify": "^11.0.5",
+    "react-toastify": "^11.1.0",
     "react-tooltip": "^5.30.0",
     "redux-persist": "^6.0.0",
     "simple-react-validator": "^1.6.2",
-    "slick-carousel": "^1.8.1",
+    "slick-carousel": "^2.0.0",
     "swiper": "^12.0.3",
     "yet-another-react-lightbox": "^3.28.0"
   },
